@@ -1,0 +1,17 @@
+:root {
+  --primary: #453c67;
+  --secondary: #6d67e4;
+  --accent: #ffc857;
+  --background: #fefefe;
+  --text: #2d2d2d;
+  --soft: #f4f4f4;
+}
+
+body {
+  margin: 0;
+  font-family: 'Quicksand', sans-serif;
+  background-color: var(--background);
+  color: var(--text);
+  line-height: 1.6;
+
+}
