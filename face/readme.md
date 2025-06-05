@@ -5,7 +5,7 @@
 # How to start it
 start the the webapp with the command
 ```
-nodemon ./face/public/server.js
+nodemon ./face/server.js
 ```
 The port by default is 5000
 # using it
