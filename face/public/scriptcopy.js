@@ -10,39 +10,16 @@ const emotions = [
   "surprised",
 ];
 
-let data = null;
-let lastExpression = null;
-
-function indexOfMax(arr) {
-  if (arr.length === 0) {
-    return -1;
-  }
-
-  let max = arr[0];
-  let maxIndex = 0;
-
-  for (let i = 1; i < arr.length; i++) {
-    if (arr[i] > max) {
-      maxIndex = i;
-      max = arr[i];
-    }
-  }
-
-  return maxIndex;
-}
-
 const run = async () => {
   const stream = await navigator.mediaDevices.getUserMedia({
     video: true,
     audio: false,
   });
   const videoFeedEl = document.getElementById("video-feed");
-  videoFeedEl.autoplay = true;
-  videoFeedEl.muted = true; // just in case
-  videoFeedEl.playsInline = true;
-  videoFeedEl.style.display = "none";
   videoFeedEl.srcObject = stream;
 
+  //loading models
+  //these are all pre trained models for facial detection
   await Promise.all([
     faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
@@ -55,32 +32,50 @@ const run = async () => {
   canvas.height = videoFeedEl.videoHeight;
   canvas.width = videoFeedEl.videoWidth;
 
+  //facial detection in realtime
   setInterval(async () => {
     let faceAIData = await faceapi
       .detectAllFaces(videoFeedEl)
       .withFaceLandmarks()
       .withFaceDescriptors()
       .withFaceExpressions();
+    //draw on our canvas
 
     canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-
+    //draw bounding box
     faceAIData = faceapi.resizeResults(faceAIData, videoFeedEl);
     faceapi.draw.drawDetections(canvas, faceAIData);
     faceapi.draw.drawFaceExpressions(canvas, faceAIData);
-
-    if (faceAIData.length > 0) {
-      data = faceAIData[0].expressions;
-
-      // Extract dominant emotion
-      const values = emotions.map((e) => data[e]);
-      const maxIdx = indexOfMax(values);
-      lastExpression = emotions[maxIdx];
-    }
+    data = faceAIData[0]?.expressions;
   }, 200);
 };
+let data = null;
 
-document.addEventListener("keypress", (event) => {
-  console.log("Dominant expression:", lastExpression);
+addEventListener("keypress", (event) => {
+  console.log(data);
+  console.log(lastExpressions);
 });
 
+function checkDom(arr) {
+  if (arr.length === 0) {
+    return -1;
+  }
+
+  var max = arr[0];
+  var maxIndex = 0;
+
+  for (var i = 1; i < arr.length; i++) {
+    if (arr[i] > max) {
+      maxIndex = i;
+      max = arr[i];
+    }
+  }
+
+  return maxIndex;
+}
+const lastExpressions = data.map((obj) => {
+  const values = emotions.map((emotion) => obj[emotion]);
+  const maxIdx = indexOfMax(values);
+  return emotions[maxIdx]; // return dominant emotion as string
+});
 run();
