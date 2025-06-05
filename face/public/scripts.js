@@ -13,6 +13,7 @@ const emotions = [
 let data = null;
 let lastExpression = null;
 
+//checks what animation has the highest value in the array
 function indexOfMax(arr) {
   if (arr.length === 0) {
     return -1;
@@ -36,13 +37,15 @@ const run = async () => {
     video: true,
     audio: false,
   });
+
+  //get webcam video
   const videoFeedEl = document.getElementById("video-feed");
   videoFeedEl.autoplay = true;
-  videoFeedEl.muted = true; // just in case
   videoFeedEl.playsInline = true;
   videoFeedEl.style.display = "none";
   videoFeedEl.srcObject = stream;
 
+  //loads all the AI models
   await Promise.all([
     faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
@@ -50,11 +53,7 @@ const run = async () => {
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
   ]);
 
-  const canvas = document.getElementById("canvas");
-
-  canvas.height = videoFeedEl.videoHeight;
-  canvas.width = videoFeedEl.videoWidth;
-
+  //gets all the data every 200ms
   setInterval(async () => {
     let faceAIData = await faceapi
       .detectAllFaces(videoFeedEl)
@@ -62,16 +61,11 @@ const run = async () => {
       .withFaceDescriptors()
       .withFaceExpressions();
 
-    canvas.getContext("2d").clearRect(0, 0, canvas.width, canvas.height);
-
     faceAIData = faceapi.resizeResults(faceAIData, videoFeedEl);
-    faceapi.draw.drawDetections(canvas, faceAIData);
-    faceapi.draw.drawFaceExpressions(canvas, faceAIData);
 
     if (faceAIData.length > 0) {
       data = faceAIData[0].expressions;
 
-      // Extract dominant emotion
       const values = emotions.map((e) => data[e]);
       const maxIdx = indexOfMax(values);
       lastExpression = emotions[maxIdx];
