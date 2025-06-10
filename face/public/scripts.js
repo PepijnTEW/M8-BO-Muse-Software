@@ -1,39 +1,80 @@
-console.log(faceapi)
+console.log(faceapi);
 
-const run = async()=>{
-    const stream = await navigator.mediaDevices.getUserMedia({
-        video: true,
-        audio: false,
-    });
-    const videoFeedEl = document.getElementById('video-feed');
-    videoFeedEl.srcObject = stream;
+const emotions = [
+  "neutral",
+  "happy",
+  "sad",
+  "angry",
+  "fearful",
+  "disgusted",
+  "surprised",
+];
 
-    //loading models
-    //these are all pre trained models for facial detection
-    await Promise.all([
-        faceapi.nets.ssdMobilenetv1.loadFromUri('./models'),
-        faceapi.nets.faceLandmark68Net.loadFromUri('./models'),
-        faceapi.nets.faceRecognitionNet.loadFromUri('./models'),
-        faceapi.nets.faceExpressionNet.loadFromUri('./models')
-    ])
+let data = null;
+let lastExpression = null;
 
-    const canvas = document.getElementById('canvas');
+//checks what animation has the highest value in the array
+function indexOfMax(arr) {
+  if (arr.length === 0) {
+    return -1;
+  }
 
-    canvas.height = videoFeedEl.videoHeight;
-    canvas.width = videoFeedEl.videoWidth;
+  let max = arr[0];
+  let maxIndex = 0;
 
-    //facial detection in realtime
+  for (let i = 1; i < arr.length; i++) {
+    if (arr[i] > max) {
+      maxIndex = i;
+      max = arr[i];
+    }
+  }
 
-    setInterval(async() => {
-        let faceAIData = await faceapi.detectAllFaces(videoFeedEl).withFaceLandmarks().withFaceDescriptors().withFaceExpressions();
-
-        //draw on our canvas
-        canvas.getContext('2d').clearRect(0,0,canvas.width,canvas.height);
-        //draw bounding box
-        faceAIData = faceapi.resizeResults(faceAIData,videoFeedEl);
-        faceapi.draw.drawDetections(canvas,faceAIData);
-    }, 200);
+  return maxIndex;
 }
 
+const run = async () => {
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video: true,
+    audio: false,
+  });
 
-run()
+  //get webcam video
+  const videoFeedEl = document.getElementById("video-feed");
+  videoFeedEl.autoplay = true;
+  videoFeedEl.playsInline = true;
+  videoFeedEl.style.display = "none";
+  videoFeedEl.srcObject = stream;
+
+  //loads all the AI models
+  await Promise.all([
+    faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
+    faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
+    faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
+    faceapi.nets.faceExpressionNet.loadFromUri("./models"),
+  ]);
+
+  //gets all the data every 200ms
+  setInterval(async () => {
+    let faceAIData = await faceapi
+      .detectAllFaces(videoFeedEl)
+      .withFaceLandmarks()
+      .withFaceDescriptors()
+      .withFaceExpressions();
+
+    faceAIData = faceapi.resizeResults(faceAIData, videoFeedEl);
+
+    if (faceAIData.length > 0) {
+      data = faceAIData[0].expressions;
+
+      const values = emotions.map((e) => data[e]);
+      const maxIdx = indexOfMax(values);
+      lastExpression = emotions[maxIdx];
+    }
+  }, 200);
+};
+
+document.addEventListener("keypress", (event) => {
+  console.log("Dominant expression:", lastExpression);
+});
+
+run();
