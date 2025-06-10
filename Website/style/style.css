@@ -1,0 +1,124 @@
+*{
+  margin: 0;
+  padding: 0;
+}
+
+@font-face {
+  font-family: "CustomFont";
+  src: url(./ProductDesign.ttf);
+}
+body{
+  background-color: #F6F4EB;
+  font-size: 62.5%;
+}
+
+button{
+  background-color: #749BC2;
+  border: none;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+}
+.header{
+  width: 90vw;
+  margin: auto;
+  background-color:#163172;
+  font-family: "CustomFont";
+  color: #fff;
+  text-shadow: 1px 1px black;
+  letter-spacing: 10px;
+  text-align: center;
+  padding: 1rem;
+  font-size: 1.4rem;
+}
+
+.Boxes-Flex{
+  display: flex;
+  flex-wrap: wrap;
+  width: 90vw;
+  margin: 1rem auto;
+  justify-content: space-between;
+}
+.Media{
+  background-color: #D6E4F0;
+  box-shadow: 1px 1px 3px #9eaab4;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  width: 50%;
+}
+
+.Box-Style {
+  background-color: #D6E4F0;
+  box-shadow: 1px 1px 3px #9eaab4;
+  border-radius: 1.2rem;
+  padding: 1rem;
+  font-size: 1.2rem;
+  width: 20rem;
+  height: auto;
+  box-sizing: border-box;
+  margin-bottom: 1rem;
+}
+.boxes-info{
+  display: flex;
+  flex-direction: column;
+  width: 20rem;
+}
+
+@media (max-width: 970px) { /* voor de mobiel*/
+  .header{
+    font-size: 1rem;
+  }
+  .box-toggle {
+    background-color: #D6E4F0;
+    cursor: pointer;
+    padding: 0.3rem;
+  }
+  .Media{
+    width: 77vw;
+  }
+  .box-toggle-button {
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+
+  .box-content {
+    display: none;
+    margin-top: 1rem;
+  }
+
+  .box-toggle.active .box-content {
+    display: block;
+  }
+      .grid {
+    flex-direction: column;
+    align-items: center;
+  }
+   .Boxes-Flex {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    margin-top: 2rem;
+  }
+    .Box-Style {
+    width: 90vw; 
+    max-width: 20rem;
+  }
+}
+
+@media (min-width: 971px) { /* voor de buttons*/
+  .box-toggle {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  .box-toggle-button {
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .box-content {
+    display: block;
+  }
+
+}
