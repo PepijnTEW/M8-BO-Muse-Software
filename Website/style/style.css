@@ -21,7 +21,7 @@ button{
 .header{
   width: 90vw;
   margin: auto;
-  background-color:#4682A9;
+  background-color:#163172;
   font-family: "CustomFont";
   color: #fff;
   text-shadow: 1px 1px black;
@@ -31,47 +31,27 @@ button{
   font-size: 1.4rem;
 }
 
-.Info{
-  background-color: #749BC2;
-  width: 20rem;
-  font-size: 1rem;
-  padding: 1rem;
-}
-
-
 .Boxes-Flex{
   display: flex;
   flex-wrap: wrap;
   width: 90vw;
   margin: 1rem auto;
   justify-content: space-between;
-  background-color: #F6F4EB;
 }
 .Media{
-  background-color: #749BC2;
+  background-color: #D6E4F0;
+  box-shadow: 1px 1px 3px #9eaab4;
   padding: 1rem;
+  margin-bottom: 1rem;
   width: 50%;
 }
 
-.How-Does-It-Work{
-  background-color: #749BC2;
-  padding: 1rem;
-  font-size: 1rem;
-  width: 20rem;
-  height: 15rem;
-}
-
-.About-Us{
-  background-color: #749BC2;
-  font-size: 1rem;
-  padding: 1rem;
-  width: 20rem;
-}
-/* Algemene box stijl */
 .Box-Style {
-  background-color: #749BC2;
+  background-color: #D6E4F0;
+  box-shadow: 1px 1px 3px #9eaab4;
+  border-radius: 1.2rem;
   padding: 1rem;
-  font-size: 1rem;
+  font-size: 1.2rem;
   width: 20rem;
   height: auto;
   box-sizing: border-box;
@@ -82,24 +62,27 @@ button{
   flex-direction: column;
   width: 20rem;
 }
-/* Mobiel gedrag */
-@media (max-width: 970px) {
-  .box-toggle {
-    background-color: #749BC2;
-    color: white;
-    cursor: pointer;
-    padding: 1rem;
-  }
 
+@media (max-width: 970px) { /* voor de mobiel*/
+  .header{
+    font-size: 1rem;
+  }
+  .box-toggle {
+    background-color: #D6E4F0;
+    cursor: pointer;
+    padding: 0.3rem;
+  }
+  .Media{
+    width: 77vw;
+  }
   .box-toggle-button {
-    font-size: 1.6rem;
+    font-size: 1.2rem;
     font-weight: bold;
   }
 
   .box-content {
     display: none;
     margin-top: 1rem;
-    color: white;
   }
 
   .box-toggle.active .box-content {
@@ -118,13 +101,12 @@ button{
     margin-top: 2rem;
   }
     .Box-Style {
-    width: 90vw; /* kleiner dan 100vw zodat het niet tegen de rand aanplakt */
+    width: 90vw; 
     max-width: 20rem;
   }
 }
 
-/* Desktop gedrag */
-@media (min-width: 971px) {
+@media (min-width: 971px) { /* voor de buttons*/
   .box-toggle {
     cursor: default;
     pointer-events: none;
