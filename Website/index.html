@@ -4,7 +4,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MUSE - Emotie Robot</title>
-  <link rel="stylesheet" href="./style/style.css" />
+  <link rel="stylesheet" href="./style/style.css"/>
+  <script src="./js/index.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
@@ -15,26 +16,50 @@
     </div>
   </header>
 
-  <div class="grid">
-    <section class="intro">
-      <h2>Wat is MUSE?</h2>
-      <p>MUSE is een interactieve kunstinstallatie waarin een robot jouw gezicht scant en op basis van je emotie een filmpje toont. Kunst en technologie komen hier samen om jouw gevoel te verbeelden.</p>
+<div class="Boxes-Flex">
+
+  <section class="Box Box-Style">
+    <div class="box-toggle" onclick="toggleBox(this)">
+      <div class="box-toggle-button">
+        Wat is MUSE?
+      </div>
+      <div class="box-content">
+        <p>MUSE is een interactieve kunstinstallatie waarin een robot jouw gezicht scant en op basis van je emotie een filmpje toont...</p>
+      </div>
+    </div>
+  </section>
+
+    <section class="Media">
+      <figure>
+        <h2>HIER KOMT DE MEDIA</h2>
+      </figure>
     </section>
 
-    <section class="How-Does-It-Work">
-      <h2>Hoe werkt het?</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab consequuntur molestias perspiciatis reprehenderit sed ex fugit, nostrum, cum officia sit possimus soluta consectetur veritatis iste enim ipsam quae ipsa quasi.</p>
-    </section>
+    <div class="boxes-info">
+  <section class="Box Box-Style">
+    <div class="box-toggle" onclick="toggleBox(this)">
+      <div class="box-toggle-button">
+        Hoe werkt het?
+      </div>
+      <div class="box-content">
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
+      </div>
+    </div>
+  </section>
 
-    <section class="About-Us">
-      <h2>About us</h2>
-      <p>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Perferendis quam aliquam consequatur minus? Commodi, nihil aliquam? Adipisci voluptatibus illo assumenda labore cum pariatur accusantium quos et! Possimus voluptates iste quasi.</p>
-    </section>
-  </div>
-
+  <section class="Box Box-Style">
+    <div class="box-toggle" onclick="toggleBox(this)">
+      <div class="box-toggle-button">
+        About us
+      </div>
+      <div class="box-content">
+        <p>Wij zijn allemaal 2e jaar studenten aan het Media College Amsterdam...</p>
+      </div>
+    </div>
+    </div>
+  </section>
+</div>
   <footer>
-    
   </footer>
-
 </body>
 </html>
