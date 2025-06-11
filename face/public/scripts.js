@@ -1,19 +1,16 @@
-console.log(faceapi);
-
-const emotions = [
-  "neutral",
-  "happy",
-  "sad",
-  "angry",
-  "fearful",
-  "disgusted",
-  "surprised",
-];
+//Defining Needed Variables
+const emotions = ["neutral", "happy", "sad", "angry"];
 
 let data = null;
 let lastExpression = null;
 
-//checks what animation has the highest value in the array
+let waitInterval = null;
+let lastLogTime = 0;
+const LOG_COOLDOWN = 5000;
+
+const TITLE_TEXT = document.getElementById("statusText");
+
+//checks what emotion has the highest value in the array
 function indexOfMax(arr) {
   if (arr.length === 0) {
     return -1;
@@ -33,6 +30,7 @@ function indexOfMax(arr) {
 }
 
 const run = async () => {
+  //get the camera itself
   const stream = await navigator.mediaDevices.getUserMedia({
     video: true,
     audio: false,
@@ -42,7 +40,6 @@ const run = async () => {
   const videoFeedEl = document.getElementById("video-feed");
   videoFeedEl.autoplay = true;
   videoFeedEl.playsInline = true;
-  videoFeedEl.style.display = "none";
   videoFeedEl.srcObject = stream;
 
   //loads all the AI models
@@ -53,28 +50,63 @@ const run = async () => {
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
   ]);
 
-  //gets all the data every 200ms
+  //gets all the data every 1s
   setInterval(async () => {
-    let faceAIData = await faceapi
-      .detectAllFaces(videoFeedEl)
-      .withFaceLandmarks()
-      .withFaceDescriptors()
-      .withFaceExpressions();
+    try {
+      let faceAIData = await faceapi
+        .detectAllFaces(videoFeedEl)
+        .withFaceLandmarks()
+        .withFaceDescriptors()
+        .withFaceExpressions();
 
-    faceAIData = faceapi.resizeResults(faceAIData, videoFeedEl);
-
-    if (faceAIData.length > 0) {
-      data = faceAIData[0].expressions;
-
-      const values = emotions.map((e) => data[e]);
-      const maxIdx = indexOfMax(values);
-      lastExpression = emotions[maxIdx];
+      if (faceAIData.length > 0) {
+        data = faceAIData[0].expressions;
+        const values = emotions.map((e) => data[e]);
+        const maxIdx = indexOfMax(values);
+        lastExpression = emotions[maxIdx];
+      }
+    } catch (err) {
+      console.error("FaceAPI error:", err);
     }
-  }, 200);
+  }, 1000);
 };
 
 document.addEventListener("keypress", (event) => {
-  console.log("Dominant expression:", lastExpression);
+  const now = Date.now();
+  const remaining = Math.ceil((LOG_COOLDOWN - (now - lastLogTime)) / 1000);
+
+  if (now - lastLogTime > LOG_COOLDOWN) {
+    TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
+    lastLogTime = now;
+
+    // Clear any running countdown
+    if (waitInterval) {
+      clearInterval(waitInterval);
+      waitInterval = null;
+    }
+  } else {
+    // Start countdown if the user presses it faster than 1 time per 5seconds
+    if (!waitInterval) {
+      let secondsLeft = remaining;
+      TITLE_TEXT.innerText = "Please wait " + secondsLeft;
+      waitInterval = setInterval(() => {
+        secondsLeft -= 1;
+        if (secondsLeft > 0) {
+          TITLE_TEXT.innerText = "Please wait " + secondsLeft;
+        } else {
+          TITLE_TEXT.innerText = "Ready!";
+          clearInterval(waitInterval);
+          waitInterval = null;
+        }
+      }, 1000);
+    }
+  }
+});
+
+//for developing this is not my code this is to stop the camera when the tab unloads
+window.addEventListener("beforeunload", () => {
+  let tracks = videoFeedEl?.srcObject?.getTracks?.();
+  if (tracks) tracks.forEach((t) => t.stop());
 });
 
 run();
