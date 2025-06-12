@@ -12,12 +12,8 @@ const TITLE_TEXT = document.getElementById("statusText");
 
 const videoFeed = document.getElementById("video-feed");
 
-//get webcam video
-const camera = document.getElementById("camera-feed");
-camera.autoplay = true;
-camera.playsInline = true;
-camera.srcObject = stream;
-
+const FPS = 5;
+const INTERVAL = 1000 / FPS;
 //checks what emotion has the highest value in the array
 function indexOfMax(arr) {
   if (arr.length === 0) {
@@ -43,9 +39,14 @@ const run = async () => {
     video: true,
     audio: false,
   });
+  const camera = document.getElementById("camera-feed");
+  camera.autoplay = true;
+  camera.playsInline = true;
+  camera.srcObject = stream;
 
   //loads all the AI models
   await Promise.all([
+    faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
     faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
     faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
@@ -56,7 +57,7 @@ const run = async () => {
   setInterval(async () => {
     try {
       let faceAIData = await faceapi
-        .detectAllFaces(camera)
+        .detectAllFaces(camera, new faceapi.TinyFaceDetectorOptions())
         .withFaceLandmarks()
         .withFaceDescriptors()
         .withFaceExpressions();
@@ -70,7 +71,7 @@ const run = async () => {
     } catch (err) {
       console.error("FaceAPI error:", err);
     }
-  }, 1000);
+  }, INTERVAL);
 };
 
 document.addEventListener("keypress", (event) => {
@@ -106,9 +107,5 @@ document.addEventListener("keypress", (event) => {
 });
 
 //for developing this is not my code this is to stop the camera when the tab unloads
-window.addEventListener("beforeunload", () => {
-  let tracks = camera?.srcObject?.getTracks?.();
-  if (tracks) tracks.forEach((t) => t.stop());
-});
 
 run();
