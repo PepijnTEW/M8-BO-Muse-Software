@@ -36,7 +36,9 @@ button{
   flex-wrap: wrap;
   width: 90vw;
   margin: 1rem auto;
-  justify-content: space-between;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 2rem;
 }
 .Media{
   background-color: #D6E4F0;
@@ -55,7 +57,7 @@ button{
   width: 20rem;
   height: auto;
   box-sizing: border-box;
-  margin-bottom: 1rem;
+  margin: 1rem;
 }
 .boxes-info{
   display: flex;
@@ -66,6 +68,8 @@ button{
 @media (max-width: 970px) { /* voor de mobiel*/
   .header{
     font-size: 1rem;
+    width: 94%;
+    text-align: center;
   }
   .box-toggle {
     background-color: #D6E4F0;
@@ -73,7 +77,7 @@ button{
     padding: 0.3rem;
   }
   .Media{
-    width: 77vw;
+    width: 90%;
   }
   .box-toggle-button {
     font-size: 1.2rem;
@@ -82,13 +86,12 @@ button{
 
   .box-content {
     display: none;
-    margin-top: 1rem;
   }
 
   .box-toggle.active .box-content {
     display: block;
   }
-      .grid {
+  .grid {
     flex-direction: column;
     align-items: center;
   }
@@ -97,12 +100,21 @@ button{
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 100%;
+    width: 80vw;
     margin-top: 2rem;
   }
-    .Box-Style {
-    width: 90vw; 
-    max-width: 20rem;
+
+  .Box-Style {
+    width: 95%;
+    margin: 1rem auto;
+  }
+
+  .boxes-info {
+    width: 100%;
+    align-items: center;
+  }
+  .boxes-info{
+    align-self: flex-start;
   }
 }
 
