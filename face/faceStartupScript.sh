@@ -10,14 +10,14 @@ if [ -f .env ]; then
   export $(grep -v '^#' .env | xargs)
 fi
 
-# Function to open browser when server is up
+# Function to open browser when server is up (in kiosk mode)
 open_browser_when_ready() {
   echo "Waiting for server to be ready at $URL..."
   until curl --output /dev/null --silent --head --fail "$URL"; do
     sleep 0.5
   done
-  echo "Server is up! Opening $URL in Firefox..."
-  firefox "$URL" &
+  echo "Server is up! Opening $URL in Firefox kiosk mode..."
+  firefox --kiosk "$URL" &
 }
 
 # Start the browser wait function in background
