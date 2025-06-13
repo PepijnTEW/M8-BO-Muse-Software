@@ -103,7 +103,8 @@ document.addEventListener("keypress", (event) => {
         if (secondsLeft > 0) {
           TITLE_TEXT.innerText = "Please wait " + secondsLeft;
         } else {
-          TITLE_TEXT.innerText = "Ready!";
+          TITLE_TEXT.innerText =
+            " Please Look at The Camera and Press The Button! Once you made a expression";
           clearInterval(waitInterval);
           waitInterval = null;
         }
