@@ -2,7 +2,7 @@
 
 # Entry file for your Node.js server
 ENTRY_FILE="./server.js"
-URL="http://localhost:5000"
+URL="http://localhost:3000"
 
 # Optional: Load environment variables from .env
 if [ -f .env ]; then
