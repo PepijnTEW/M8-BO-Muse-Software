@@ -1,0 +1,24 @@
+body {
+  margin: 0;
+  padding: 0;
+}
+#camera-feed {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+#container {
+  position: absolute;
+  background: rgb(29, 30, 78);
+  color: antiquewhite;
+  font-size: 24px;
+  height: 100vh;
+  width: 100vw;
+  margin: 0 auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -79,7 +79,13 @@ document.addEventListener("keypress", (event) => {
   const remaining = Math.ceil((LOG_COOLDOWN - (now - lastLogTime)) / 1000);
 
   if (now - lastLogTime > LOG_COOLDOWN) {
-    TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
+    if (lastExpression === null) {
+      TITLE_TEXT.innerText = "Please Try Again!";
+      lastLogTime = now;
+    } else if (lastExpression === "neutral") {
+      TITLE_TEXT.innerText = "Please Make A Expression";
+      lastLogTime = now;
+    } else TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
     lastLogTime = now;
 
     // Clear any running countdown
