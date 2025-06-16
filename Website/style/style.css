@@ -57,14 +57,17 @@ button{
   width: 20rem;
   height: auto;
   box-sizing: border-box;
-  margin: 1rem;
 }
 .boxes-info{
   display: flex;
   flex-direction: column;
   width: 20rem;
+  height: 75vh;
 }
-
+.Box{
+  margin-bottom: 1rem;
+  height: 50%;
+}
 @media (max-width: 970px) { /* voor de mobiel*/
   .header{
     font-size: 1rem;
