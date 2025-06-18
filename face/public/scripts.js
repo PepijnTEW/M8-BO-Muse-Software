@@ -3,16 +3,19 @@ const emotions = ["neutral", "happy", "sad", "angry"];
 
 let data = null;
 let lastExpression = null;
+let FaceDetected = false;
+let isBusy = false;
 
 let waitInterval = null;
 let lastLogTime = 0;
 const LOG_COOLDOWN = 5000;
 
-const TITLE_TEXT = document.getElementById("statusText");
+const TITLE_TEXT = document.getElementById("status-text");
+const BORDER = document.getElementById("container");
+const VIDEO_FEED = document.getElementById("video-feed");
+const CAMERA = document.getElementById("camera-feed");
 
-const videoFeed = document.getElementById("video-feed");
-
-const FPS = 5;
+const FPS = 2.5;
 const INTERVAL = 1000 / FPS;
 //checks what emotion has the highest value in the array
 function indexOfMax(arr) {
@@ -39,37 +42,45 @@ const run = async () => {
     video: true,
     audio: false,
   });
-  const camera = document.getElementById("camera-feed");
-  camera.autoplay = true;
-  camera.playsInline = true;
-  camera.srcObject = stream;
+
+  CAMERA.autoplay = true;
+  CAMERA.playsInline = true;
+  CAMERA.srcObject = stream;
 
   //loads all the AI models
   await Promise.all([
-    faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
     faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
     faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
   ]);
 
-  //gets all the data every 1s
   setInterval(async () => {
     try {
       let faceAIData = await faceapi
-        .detectAllFaces(camera, new faceapi.TinyFaceDetectorOptions())
+        .detectSingleFace(
+          CAMERA,
+          new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 })
+        )
         .withFaceLandmarks()
-        .withFaceDescriptors()
+        .withFaceDescriptor()
         .withFaceExpressions();
 
-      if (faceAIData.length > 0) {
-        data = faceAIData[0].expressions;
+      FaceDetected = !!faceAIData;
+
+      if (FaceDetected) {
+        data = faceAIData.expressions;
         const values = emotions.map((e) => data[e]);
         const maxIdx = indexOfMax(values);
+        BORDER.style.borderColor = "lime";
         lastExpression = emotions[maxIdx];
+      } else {
+        BORDER.style.borderColor = "red";
+        lastExpression = null;
       }
     } catch (err) {
       console.error("FaceAPI error:", err);
+      FaceDetected = false;
     }
   }, INTERVAL);
 };
@@ -81,20 +92,32 @@ document.addEventListener("keypress", (event) => {
   if (now - lastLogTime > LOG_COOLDOWN) {
     if (lastExpression === null) {
       TITLE_TEXT.innerText = "Please Try Again!";
-      lastLogTime = now;
     } else if (lastExpression === "neutral") {
-      TITLE_TEXT.innerText = "Please Make A Expression";
-      lastLogTime = now;
-    } else TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
+      TITLE_TEXT.innerText = "Please Make An Expression";
+    } else {
+      TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
+      VIDEO_FEED.pause();
+      VIDEO_FEED.currentTime = 0;
+      VIDEO_FEED.src = `animations/${lastExpression}.mp4`;
+      VIDEO_FEED.load();
+      VIDEO_FEED.style.display = "block";
+
+      VIDEO_FEED.onended = () => {
+        VIDEO_FEED.style.display = "none";
+        VIDEO_FEED.onended = null;
+        VIDEO_FEED.src = "";
+        TITLE_TEXT.innerText =
+          "Please Look at The Camera and Press The Button! Once you made an expression";
+      };
+    }
+
     lastLogTime = now;
 
-    // Clear any running countdown
     if (waitInterval) {
       clearInterval(waitInterval);
       waitInterval = null;
     }
   } else {
-    // Start countdown if the user presses it faster than 1 time per 5seconds
     if (!waitInterval) {
       let secondsLeft = remaining;
       TITLE_TEXT.innerText = "Please wait " + secondsLeft;
@@ -104,7 +127,7 @@ document.addEventListener("keypress", (event) => {
           TITLE_TEXT.innerText = "Please wait " + secondsLeft;
         } else {
           TITLE_TEXT.innerText =
-            " Please Look at The Camera and Press The Button! Once you made a expression";
+            "Please Look at The Camera and Press The Button! Once you made an expression";
           clearInterval(waitInterval);
           waitInterval = null;
         }
@@ -114,5 +137,12 @@ document.addEventListener("keypress", (event) => {
 });
 
 //for developing this is not my code this is to stop the camera when the tab unloads
+
+window.addEventListener("beforeunload", () => {
+  const stream = CAMERA.srcObject;
+  if (stream) {
+    stream.getTracks().forEach((track) => track.stop());
+  }
+});
 
 run();
