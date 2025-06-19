@@ -1,16 +1,22 @@
-<style>
-  #container {
-    position: relative;
-    width: 720px;
-    height: 560px;
-    margin: 0 auto;
-  }
-</style>
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style.css" />
+    <script src="./face-api.min.js" defer></script>
+    <script src="./scripts.js" defer></script>
+    <title>Document</title>
+  </head>
+  <body>
+    <video id="camera-feed" height="560" width="720" autoplay></video>
 
-<div id="container">
-  <video id="video-feed" height="560" width="720" autoplay></video>
-  <h1 id="statusText">sample</h1>
-</div>
-
-<script src="./face-api.min.js" defer></script>
-<script src="./scripts.js" defer></script>
+    <div id="container">
+      <video id="video-feed" src="" muted autoplay playsinline></video>
+      <h1 id="status-text">
+        Please Look at The Camera and Press The Button! Once you made an
+        expression
+      </h1>
+    </div>
+  </body>
+</html>

@@ -57,13 +57,18 @@ button{
   width: 20rem;
   height: auto;
   box-sizing: border-box;
-  margin: 1rem;
 }
 .boxes-info{
   display: flex;
   flex-direction: column;
   width: 20rem;
+  height: 75vh;
 }
+.Box{
+  margin-bottom: 1rem;
+  height: 50%;
+}
+<<<<<<< HEAD
 
 .box-content p {
   margin-bottom: 1em;
@@ -94,6 +99,8 @@ button{
 
 
 
+=======
+>>>>>>> 8c362d6b667039a0e911588d520a710a39a97e25
 @media (max-width: 970px) { /* voor de mobiel*/
   .header{
     font-size: 1rem;
