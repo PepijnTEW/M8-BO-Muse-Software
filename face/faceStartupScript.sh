@@ -22,7 +22,10 @@ open_browser_when_ready() {
     sleep 0.5
   done
   echo "Server is up! Opening $URL in Firefox kiosk mode..."
-  chromium --kiosk "$URL" &
+
+  firefox \
+  --kiosk "$URL" \
+  &
 }
 
 # Start the browser wait function in background
