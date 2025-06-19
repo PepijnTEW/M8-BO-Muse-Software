@@ -46,45 +46,52 @@ const run = async () => {
   CAMERA.playsInline = true;
   CAMERA.srcObject = stream;
 
-  // loads the lightweight TinyFaceDetector model and expression model
+  // loads both TinyFaceDetector and SSD Mobilenet for extended range
   await Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
+    faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
   ]);
   console.log(
-    "FaceAPI models loaded: TinyFaceDetector, Landmark68, ExpressionNet"
+    "FaceAPI models loaded: TinyFaceDetector, SSDMobilenetv1, Landmark68, ExpressionNet"
   );
 
   // continuously check for face + expression every INTERVAL
   setInterval(async () => {
     try {
-      const faceAIData = await faceapi
-        .detectSingleFace(
+      // try SSD first for long range; fallback to tiny for speed
+      let detection = await faceapi.detectSingleFace(
+        CAMERA,
+        new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 })
+      );
+      if (!detection) {
+        detection = await faceapi.detectSingleFace(
           CAMERA,
           new faceapi.TinyFaceDetectorOptions({
-            inputSize: 128,
-            scoreThreshold: 0.5,
+            inputSize: 512,
+            scoreThreshold: 0.3,
           })
-        )
-        .withFaceLandmarks()
-        .withFaceExpressions();
+        );
+      }
 
-      FaceDetected = !!faceAIData;
-
-      if (FaceDetected) {
-        data = faceAIData.expressions;
+      if (detection) {
+        const full = await detection.withFaceLandmarks().withFaceExpressions();
+        FaceDetected = true;
+        data = full.expressions;
         const values = emotions.map((e) => data[e]);
         const maxIdx = indexOfMax(values);
         BORDER.style.borderColor = "lime";
         lastExpression = emotions[maxIdx];
       } else {
         BORDER.style.borderColor = "red";
+        FaceDetected = false;
         lastExpression = null;
       }
     } catch (err) {
       console.error("FaceAPI error:", err);
       FaceDetected = false;
+      lastExpression = null;
     }
   }, INTERVAL);
 };
@@ -100,19 +107,7 @@ document.addEventListener("keypress", (event) => {
       TITLE_TEXT.innerText = "Please Make An Expression";
     } else {
       TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
-      VIDEO_FEED.pause();
-      VIDEO_FEED.currentTime = 0;
-      VIDEO_FEED.src = `animations/${lastExpression}.mp4`;
-      VIDEO_FEED.load();
-      VIDEO_FEED.style.display = "block";
-
-      VIDEO_FEED.onended = () => {
-        VIDEO_FEED.style.display = "none";
-        VIDEO_FEED.onended = null;
-        VIDEO_FEED.src = "";
-        TITLE_TEXT.innerText =
-          "Please Look at The Camera and Press The Button! Once you made an expression";
-      };
+      playLottie(lastExpression); // or existing video logic
     }
 
     lastLogTime = now;
