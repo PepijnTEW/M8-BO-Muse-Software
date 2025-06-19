@@ -4,6 +4,7 @@ const emotions = ["neutral", "happy", "sad", "angry"];
 let data = null;
 let lastExpression = null;
 let FaceDetected = false;
+let isVideoPlaying = false; // flag to pause detection during video
 
 let waitInterval = null;
 let lastLogTime = 0;
@@ -50,6 +51,7 @@ const run = async () => {
 
   // detection loop
   setInterval(async () => {
+    if (isVideoPlaying) return; // skip detection while video plays
     try {
       const detection = await faceapi
         .detectSingleFace(
@@ -86,6 +88,8 @@ const run = async () => {
  * Handle keypress: show expression and play corresponding video
  */
 const handlePress = () => {
+  // prevent re-trigger during video playback
+  if (isVideoPlaying) return;
   const now = Date.now();
   if (now - lastLogTime <= LOG_COOLDOWN) return;
   lastLogTime = now;
@@ -95,9 +99,10 @@ const handlePress = () => {
   } else if (lastExpression === "neutral") {
     TITLE_TEXT.innerText = "Please Make An Expression";
   } else {
-    TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
-
+    TITLE_TEXT.innerText = "Dominant expression: " + lastExpression; // keep lime border during playback
+    BORDER.style.borderColor = "lime";
     // play video for the detected expression
+    isVideoPlaying = true;
     VIDEO_FEED.pause();
     VIDEO_FEED.currentTime = 0;
     VIDEO_FEED.src = `animations/${lastExpression}.mp4`;
@@ -107,6 +112,7 @@ const handlePress = () => {
 
     // hide when done
     VIDEO_FEED.onended = () => {
+      isVideoPlaying = false;
       VIDEO_FEED.style.display = "none";
       VIDEO_FEED.onended = null;
       VIDEO_FEED.src = "";
