@@ -58,10 +58,7 @@ const run = async () => {
   setInterval(async () => {
     try {
       let faceAIData = await faceapi
-        .detectSingleFace(
-          CAMERA,
-          new faceapi.SsdMobilenetv1Options({ minConfidence: 0.5 })
-        )
+        .detectSingleFace(CAMERA, new faceapi.SsdMobilenetv1Options())
         .withFaceLandmarks()
         .withFaceDescriptor()
         .withFaceExpressions();
