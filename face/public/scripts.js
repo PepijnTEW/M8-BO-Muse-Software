@@ -1,4 +1,4 @@
-//Defining Needed Variables
+// Defining Needed Variables
 const emotions = ["neutral", "happy", "sad", "angry"];
 
 let data = null;
@@ -17,19 +17,18 @@ const CAMERA = document.getElementById("camera-feed");
 
 const FPS = 2.5;
 const INTERVAL = 1000 / FPS;
-//checks what emotion has the highest value in the array
+
+// checks what emotion has the highest value in the array
 function indexOfMax(arr) {
-  if (arr.length === 0) {
-    return -1;
-  }
+  if (arr.length === 0) return -1;
 
   let max = arr[0];
   let maxIndex = 0;
 
   for (let i = 1; i < arr.length; i++) {
     if (arr[i] > max) {
-      maxIndex = i;
       max = arr[i];
+      maxIndex = i;
     }
   }
 
@@ -37,7 +36,7 @@ function indexOfMax(arr) {
 }
 
 const run = async () => {
-  //get the camera itself
+  // get the camera itself
   const stream = await navigator.mediaDevices.getUserMedia({
     video: true,
     audio: false,
@@ -47,20 +46,28 @@ const run = async () => {
   CAMERA.playsInline = true;
   CAMERA.srcObject = stream;
 
-  //loads all the AI models
+  // loads the lightweight TinyFaceDetector model and expression model
   await Promise.all([
-    faceapi.nets.ssdMobilenetv1.loadFromUri("./models"),
+    faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
-    faceapi.nets.faceRecognitionNet.loadFromUri("./models"),
     faceapi.nets.faceExpressionNet.loadFromUri("./models"),
   ]);
+  console.log(
+    "FaceAPI models loaded: TinyFaceDetector, Landmark68, ExpressionNet"
+  );
 
+  // continuously check for face + expression every INTERVAL
   setInterval(async () => {
     try {
-      let faceAIData = await faceapi
-        .detectSingleFace(CAMERA, new faceapi.SsdMobilenetv1Options())
+      const faceAIData = await faceapi
+        .detectSingleFace(
+          CAMERA,
+          new faceapi.TinyFaceDetectorOptions({
+            inputSize: 128,
+            scoreThreshold: 0.5,
+          })
+        )
         .withFaceLandmarks()
-        .withFaceDescriptor()
         .withFaceExpressions();
 
       FaceDetected = !!faceAIData;
@@ -133,8 +140,7 @@ document.addEventListener("keypress", (event) => {
   }
 });
 
-//for developing this is not my code this is to stop the camera when the tab unloads
-
+// stop the camera when the tab unloads
 window.addEventListener("beforeunload", () => {
   const stream = CAMERA.srcObject;
   if (stream) {
