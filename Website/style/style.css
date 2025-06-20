@@ -68,6 +68,39 @@ button{
   margin-bottom: 1rem;
   height: 50%;
 }
+<<<<<<< HEAD
+
+.box-content p {
+  margin-bottom: 1em;
+}
+
+.language-switch {
+  background-color: #F5FCCD;
+  color: #163172;
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin-top: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: 1px 1px 3px #9eaab4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.language-switch:hover {
+  background-color: #e0e9ad;
+  transform: scale(1.05);
+}
+
+
+
+=======
+>>>>>>> 8c362d6b667039a0e911588d520a710a39a97e25
 @media (max-width: 970px) { /* voor de mobiel*/
   .header{
     font-size: 1rem;

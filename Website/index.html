@@ -4,68 +4,72 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>MUSE - Emotie Robot</title>
-  <link rel="stylesheet" href="./style/style.css"/>
-  <link rel="stylesheet" href="./style/all.min.css">
-  <script src="./js/index.js"></script>
+  <link rel="stylesheet" href="./style/style.css" />
+  <link rel="stylesheet" href="./style/all.min.css" />
+  <script src="./js/index.js" defer></script>
   <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;700&display=swap" rel="stylesheet" />
 </head>
 <body>
 
   <header>
     <div class="header">
-      <h1>MUSE - EMOTIE ROBOT</h1>
+      <h1 id="title">MUSE - EMOTIE ROBOT</h1>
+      <button class="language-switch" onclick="switchLanguage()">
+        EN / NL <i class="fa-solid fa-globe"></i>
+      </button>
     </div>
   </header>
 
-<div class="Boxes-Flex">
+  <div class="Boxes-Flex">
 
-  <section class="Box Box-Style muse-box">
-    <div class="box-toggle" onclick="toggleBox(this)">
-      <div class="box-toggle-button">
-        <h2>Wat is Muse</h2><i class="fa-solid fa-arrow-down"></i>
+    <section class="Box Box-Style muse-box">
+      <div class="box-toggle" onclick="toggleBox(this)">
+        <div class="box-toggle-button">
+          <h2 id="watIsMuseTitel">Wat is Muse</h2>
+        </div>
+        <div class="box-content">
+          <p id="watIsMuseTekst">
+            MUSE is een innovatief kunstproject ontwikkeld door tweedejaarsstudenten van het MediaCollege Amsterdam. In opdracht van het Amsterdam Museum zijn wij als studenten aan de slag gegaan met het creëren van een interactief kunstwerk dat inspeelt op emotie en technologie. Deze robot maakt gebruik van gezichtsherkenning om jouw emotie te analyseren en speelt een persoonlijke video af.
+          </p>
+        </div>
       </div>
-      <div class="box-content">
-        <p>
-          MUSE is een innovatief kunstproject ontwikkeld door tweedejaarsstudenten van het MediaCollege Amsterdam. In opdracht van het Amsterdam Museum zijn wij als studenten aan de slag gegaan met het creëren van een interactief kunstwerk dat inspeelt op emotie en technologie.
-          Binnen dit project werken studenten van verschillende opleidingen nauw samen, waaronder Game Artist en Ruimtelijk Vormgever. In slechts een paar weken hebben we gezamenlijk een uniek concept tot leven gebracht: de EmotieRobot.
-          Deze robot maakt gebruik van gezichtsherkenning om jouw emotie te analyseren. Aan de hand van jouw gezichtsuitdrukking bepaalt de robot hoe jij je voelt en speelt vervolgens een gepersonaliseerde video af – met als doel om je op te vrolijken en een glimlach op je gezicht te toveren.
-          MUSE verbindt kunst, technologie en menselijke emotie tot een verrassende, interactieve ervaring.
-        </p>
-      </div>
-    </div>
-  </section>
+    </section>
 
     <section class="Media">
       <figure>
-        <h2>HIER KOMT DE MEDIA</h2>
+        <h2 id="mediaTitel">HIER KOMT DE MEDIA</h2>
       </figure>
     </section>
 
     <div class="boxes-info">
-  <section class="Box Box-Style">
-    <div class="box-toggle" onclick="toggleBox(this)">
-      <div class="box-toggle-button">
-        <h2>How Does It Work</h2>
-      </div>
-      <div class="box-content">
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit...</p>
-      </div>
+
+      <section class="Box Box-Style">
+        <div class="box-toggle" onclick="toggleBox(this)">
+          <div class="box-toggle-button">
+            <h2 id="hoeWerktTitel">Hoe werkt het?</h2>
+          </div>
+          <div class="box-content">
+            <p id="stap1"><strong>Stap 1:</strong> Ga rustig voor de robot staan. De installatie detecteert automatisch jouw aanwezigheid.</p>
+            <p id="stap2"><strong>Stap 2:</strong> MUSE voert een gezichtsanalyse uit. Je gezichtsuitdrukking (zoals blij, verdrietig of boos) wordt herkend.</p>
+            <p id="stap3"><strong>Stap 3:</strong> Op basis van jouw emotie toont MUSE een unieke video, speciaal afgestemd om je humeur te beïnvloeden en je te verrassen.</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="Box Box-Style">
+        <div class="box-toggle" onclick="toggleBox(this)">
+          <div class="box-toggle-button">
+            <h2 id="overOnsTitel">Over ons</h2>
+          </div>
+          <div class="box-content">
+            <p id="overOnsTekst">Wij zijn allemaal 2e jaar studenten aan het Media College Amsterdam...</p>
+          </div>
+        </div>
+      </section>
+
     </div>
-  </section>
-  
-  <section class="Box Box-Style">
-    <div class="box-toggle" onclick="toggleBox(this)">
-      <div class="box-toggle-button">
-        <h2>About Us</h2>
-      </div>
-      <div class="box-content">
-        <p>Wij zijn allemaal 2e jaar studenten aan het Media College Amsterdam...</p>
-      </div>
-    </div>
-    </div>
-  </section>
-</div>
-  <footer>
-  </footer>
+  </div>
+
+  <footer></footer>
 </body>
 </html>
