@@ -23,9 +23,11 @@ open_browser_when_ready() {
   done
   echo "Server is up! Opening $URL in Firefox kiosk mode..."
 
-  firefox \
-  --kiosk "$URL" \
-  &
+  export MOZ_ENABLE_WAYLAND=0
+  export GDK_BACKEND=x11
+
+  firefox --kiosk "$URL" &
+
 }
 
 # Start the browser wait function in background
