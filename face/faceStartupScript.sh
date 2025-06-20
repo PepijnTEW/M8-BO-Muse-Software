@@ -25,8 +25,9 @@ open_browser_when_ready() {
 
   export MOZ_ENABLE_WAYLAND=0
   export GDK_BACKEND=x11
-  
+
   firefox --kiosk "$URL" &
+
 }
 
 # Start the browser wait function in background
