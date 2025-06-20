@@ -3,6 +3,11 @@ import serial
 import subprocess
 import time
 
+import os
+
+os.environ['DISPLAY']    = ':0'
+os.environ['XAUTHORITY'] = '/home/pi/.Xauthority'
+
 # ← adjust this if your Uno shows up differently
 SERIAL_PORT = "/dev/ttyACM0"
 BAUD_RATE   = 9600
