@@ -11,7 +11,7 @@ function switchLanguage() {
     document.getElementById("stap2").innerHTML = "<strong>Step 2:</strong> MUSE analyzes your facial expression (e.g., happy, sad, angry).";
     document.getElementById("stap3").innerHTML = "<strong>Step 3:</strong> Based on your emotion, a video is shown to surprise and uplift you.";
     document.getElementById("overOnsTitel").innerText = "About us";
-    document.getElementById("overOnsTekst").innerText = "We are all second-year students at the Media College Amsterdam...";
+    document.getElementById("overOnsTekst").innerText = "For the Muse project, we, as second-year students from different study programs, joined forces to create a unique experience that brings together art, technology and spatial experience.";
     currentLang = "en";
   } else {
     document.getElementById("title").innerText = "MUSE - EMOTIE ROBOT";
@@ -23,7 +23,7 @@ function switchLanguage() {
     document.getElementById("stap2").innerHTML = "<strong>Stap 2:</strong> MUSE voert een gezichtsanalyse uit. Je gezichtsuitdrukking (zoals blij, verdrietig of boos) wordt herkend.";
     document.getElementById("stap3").innerHTML = "<strong>Stap 3:</strong> Op basis van jouw emotie toont MUSE een unieke video, speciaal afgestemd om je humeur te beïnvloeden en je te verrassen.";
     document.getElementById("overOnsTitel").innerText = "Over ons";
-    document.getElementById("overOnsTekst").innerText = "Wij zijn allemaal 2e jaar studenten aan het Media College Amsterdam...";
+    document.getElementById("overOnsTekst").innerText = "Voor het project Muse hebben wij als tweedejaarsstudenten van verschillende opleidingen onze krachten gebundeld om een unieke ervaring te creëren die kunst, technologie en ruimtelijke beleving samenbrengt.";
     currentLang = "nl";
   }
 }
