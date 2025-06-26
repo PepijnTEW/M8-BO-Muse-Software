@@ -4,6 +4,7 @@ const emotions = ["neutral", "happy", "sad", "angry"];
 let data = null;
 let lastExpression = null;
 let FaceDetected = false;
+let isVideoPlaying = false; // flag to pause detection during video
 
 let waitInterval = null;
 let lastLogTime = 0;
@@ -15,10 +16,20 @@ const BORDER = document.getElementById("container");
 const CAMERA = document.getElementById("camera-feed");
 const VIDEO_FEED = document.getElementById("video-feed");
 
+const DEFAULT_MESSAGE =
+  "Kijk naar de camera en druk op de knop zodra je een gezichts­uitdrukking maakt";
+
+const EMOTION_LABELS = {
+  happy: "Blijdschap",
+  sad: "Verdrietig",
+  angry: "Boosheid",
+};
+
 const FPS = 2.5;
 const INTERVAL = 1000 / FPS;
 
-// Helper: find index of max value in an array
+TITLE_TEXT.innerText = DEFAULT_MESSAGE;
+
 function indexOfMax(arr) {
   if (!arr || arr.length === 0) return -1;
   return arr.reduce(
@@ -27,11 +38,7 @@ function indexOfMax(arr) {
   );
 }
 
-/**
- * Main initialization: get camera and load FaceAPI models
- */
 const run = async () => {
-  // initialize camera
   const stream = await navigator.mediaDevices.getUserMedia({
     video: true,
     audio: false,
@@ -40,7 +47,6 @@ const run = async () => {
   CAMERA.playsInline = true;
   CAMERA.srcObject = stream;
 
-  // load detection & expression models
   await Promise.all([
     faceapi.nets.tinyFaceDetector.loadFromUri("./models"),
     faceapi.nets.faceLandmark68Net.loadFromUri("./models"),
@@ -48,8 +54,8 @@ const run = async () => {
   ]);
   console.log("FaceAPI models loaded");
 
-  // detection loop
   setInterval(async () => {
+    if (isVideoPlaying) return;
     try {
       const detection = await faceapi
         .detectSingleFace(
@@ -82,22 +88,25 @@ const run = async () => {
   }, INTERVAL);
 };
 
-/**
- * Handle keypress: show expression and play corresponding video
- */
 const handlePress = () => {
+  if (isVideoPlaying) return;
   const now = Date.now();
   if (now - lastLogTime <= LOG_COOLDOWN) return;
   lastLogTime = now;
 
   if (!lastExpression) {
-    TITLE_TEXT.innerText = "Please Try Again!";
+    TITLE_TEXT.innerText = "Geen gezicht gedetecteerd, probeer opnieuw!";
+    BORDER.style.borderColor = "red";
+    setTimeout(resetUI, 3000);
   } else if (lastExpression === "neutral") {
-    TITLE_TEXT.innerText = "Please Make An Expression";
+    TITLE_TEXT.innerText = "Maak alstublieft een expressie!";
+    BORDER.style.borderColor = "yellow";
+    setTimeout(resetUI, 3000);
   } else {
-    TITLE_TEXT.innerText = "Dominant expression: " + lastExpression;
-
-    // play video for the detected expression
+    const DUTCH = EMOTION_LABELS[lastExpression] || lastExpression;
+    TITLE_TEXT.innerText = `Gevonden expressie: ${DUTCH}`;
+    BORDER.style.borderColor = "lime";
+    isVideoPlaying = true;
     VIDEO_FEED.pause();
     VIDEO_FEED.currentTime = 0;
     VIDEO_FEED.src = `animations/${lastExpression}.mp4`;
@@ -105,18 +114,22 @@ const handlePress = () => {
     VIDEO_FEED.style.display = "block";
     VIDEO_FEED.play().catch((err) => console.warn("Playback error:", err));
 
-    // hide when done
     VIDEO_FEED.onended = () => {
+      isVideoPlaying = false;
       VIDEO_FEED.style.display = "none";
       VIDEO_FEED.onended = null;
       VIDEO_FEED.src = "";
-      TITLE_TEXT.innerText =
-        "Please Look at The Camera and Press The Button! Once you make an expression";
+      resetUI();
     };
   }
 };
 
 document.addEventListener("keypress", handlePress);
+
+function resetUI() {
+  TITLE_TEXT.innerText = DEFAULT_MESSAGE;
+  BORDER.style.borderColor = FaceDetected ? "lime" : "red";
+}
 
 // cleanup on unload
 window.addEventListener("beforeunload", () => {

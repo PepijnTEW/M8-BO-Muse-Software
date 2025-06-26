@@ -1,4 +1,4 @@
-*{
+* {
   margin: 0;
   padding: 0;
 }
@@ -7,22 +7,24 @@
   font-family: "CustomFont";
   src: url(./Orbitron-VariableFont_wght.ttf);
 }
-body{
+
+body {
   background-color: #F6F4EB;
   font-size: 62.5%;
   font-family: Arial, Helvetica, sans-serif;
 }
 
-button{
+button {
   background-color: #749BC2;
   border: none;
   font-size: 1.4rem;
   margin-bottom: 1rem;
 }
-.header{
+
+.header {
   width: 90vw;
   margin: auto;
-  background-color:#163172;
+  background-color: #163172;
   font-family: "CustomFont";
   color: #fff;
   text-shadow: 1px 1px black;
@@ -31,7 +33,7 @@ button{
   font-size: 1.8rem;
 }
 
-.Boxes-Flex{
+.Boxes-Flex {
   display: flex;
   flex-wrap: wrap;
   width: 90vw;
@@ -40,12 +42,14 @@ button{
   align-items: flex-start;
   gap: 2rem;
 }
-.Media{
+
+.Media {
   background-color: #D6E4F0;
   box-shadow: 1px 1px 3px #9eaab4;
   padding: 1rem;
   margin-bottom: 1rem;
   width: 50%;
+  flex-grow: 1;
 }
 
 .Box-Style {
@@ -54,21 +58,56 @@ button{
   padding: 1rem;
   font-size: 1.2rem;
   width: 20rem;
-  height: auto;
+  height: auto; 
   box-sizing: border-box;
+  overflow: visible; 
+ 
+  
 }
-.boxes-info{
+
+.boxes-info {
   display: flex;
   flex-direction: column;
   width: 20rem;
-  height: 75vh;
+ 
+ 
+  flex-grow: 1;
 }
-.Box{
+
+.Box {
   margin-bottom: 1rem;
-  height: 50%;
 }
-@media (max-width: 970px) { /* voor de mobiel*/
-  .header{
+
+.box-content p {
+  margin-bottom: 1em;
+}
+
+.language-switch {
+  background-color: #F5FCCD;
+  color: #163172;
+  font-family: "Quicksand", sans-serif;
+  font-size: 1.2rem;
+  font-weight: bold;
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 2rem;
+  cursor: pointer;
+  margin-top: 0.8rem;
+  transition: all 0.3s ease;
+  box-shadow: 1px 1px 3px #9eaab4;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.language-switch:hover {
+  background-color: #e0e9ad;
+  transform: scale(1.05);
+}
+
+@media (max-width: 970px) {
+  /* voor de mobiel */
+  .header {
     font-size: 1rem;
     width: 94%;
     text-align: center;
@@ -78,7 +117,7 @@ button{
     cursor: pointer;
     padding: 0.3rem;
   }
-  .Media{
+  .Media {
     width: 90%;
   }
   .box-toggle-button {
@@ -97,7 +136,7 @@ button{
     flex-direction: column;
     align-items: center;
   }
-   .Boxes-Flex {
+  .Boxes-Flex {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -116,7 +155,7 @@ button{
     width: 100%;
     align-items: center;
   }
-  .boxes-info{
+  .boxes-info {
     align-self: flex-start;
   }
   .Box{
@@ -124,7 +163,8 @@ button{
   }
 }
 
-@media (min-width: 971px) { /* voor de buttons*/
+@media (min-width: 971px) {
+  /* voor de buttons */
   .box-toggle {
     cursor: default;
     pointer-events: none;
@@ -138,5 +178,4 @@ button{
   .box-content {
     display: block;
   }
-
 }

@@ -22,13 +22,12 @@ open_browser_when_ready() {
     sleep 0.5
   done
   echo "Server is up! Opening $URL in Firefox kiosk mode..."
-  chromium-browser \
-  --kiosk "$URL" \
-  --enable-features=VaapiVideoDecoder,AcceleratedVideoDecode \
-  --use-gl=egl \
-  --ignore-gpu-blocklist \
-  --disable-software-rasterizer \
-  --disable-gpu-driver-bug-workarounds &
+
+  export MOZ_ENABLE_WAYLAND=0
+  export GDK_BACKEND=x11
+
+  firefox --kiosk "$URL" &
+
 }
 
 # Start the browser wait function in background
